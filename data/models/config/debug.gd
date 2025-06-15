@@ -132,7 +132,8 @@ static func debug_log_bool(dict_entry: Dictionary, argument: Variant) -> void:
 		
 		var parse_bool: String = dict_entry.bool_strings[0] if argument else dict_entry.bool_strings[1]
 		
-		print_rich(open_color, dict_entry.message, "[i][u]", parse_bool, "[/u][/i]", close_color) # Print color-coded message
+		if dict_entry.has('message'): # todo: got a crash 'cause no dict_entry.message
+			print_rich(open_color, dict_entry.message, "[i][u]", parse_bool, "[/u][/i]", close_color) # Print color-coded message
 		
 	if dict_entry.old == null or dict_entry.old != dict_entry.tmp:
 		dict_entry.old = dict_entry.tmp # Update old value if it's null or different from tmp
@@ -145,7 +146,8 @@ static func debug_log_concat1(dict_entry: Dictionary, argument: Variant) -> void
 		var open_color: String = "[color=#" + DEBUG_COLORS[dict_entry.color] + "]"
 		var close_color: String = "[/color]"
 		
-		print_rich(open_color, dict_entry.message, "[i][u]", dict_entry.tmp, "[/u][/i]", close_color) # Print color-coded message
+		if dict_entry.has('message'): # todo: got a crash 'cause no dict_entry.message
+			print_rich(open_color, dict_entry.message, "[i][u]", dict_entry.tmp, "[/u][/i]", close_color) # Print color-coded message
 		
 	if dict_entry.old == null or dict_entry.old != dict_entry.tmp:
 		dict_entry.old = dict_entry.tmp # Update old value if it's null or different from tmp
