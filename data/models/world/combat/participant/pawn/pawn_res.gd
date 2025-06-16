@@ -12,7 +12,7 @@ signal turn_ended
 ## Minimum height difference required for the pawn to jump
 const MIN_HEIGHT_TO_JUMP: int = 1
 ## Strength of gravity applied to the pawn
-const GRAVITY_STRENGTH: int = 7
+const GRAVITY_STRENGTH: int = 6
 ## Minimum time required for an attack animation
 const MIN_TIME_FOR_ATTACK: float = 1.0
 ## Number of frames in the pawn's animation
