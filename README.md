@@ -19,16 +19,16 @@ Anyways, feel free to use this sample in your own game.
 
 - You can see all of the project's features on [YouTube](https://youtu.be/lJKWlLwYDZY).
 - Another demo from [Open Source Games](https://www.youtube.com/watch?v=-AY6KEdX_3E).
-- In case you are searching for some 2d projects, checkout [GDQuest](https://github.com/GDQuest/godot-2d-tactical-rpg-movement) or [TBS_GoDot](https://github.com/ja-brouil/TBS_GoDot)
+- In case you are searching for some 2d projects, check out [GDQuest](https://github.com/GDQuest/godot-2d-tactical-rpg-movement) or [TBS_GoDot](https://github.com/ja-brouil/TBS_GoDot)
 - In case you are looking for a similar pathfinding project/tutorial: [GameDevArts](https://www.youtube.com/watch?v=fYtwZdQTP5A) (Not mine)
 
 
-As mentioned before, this project uses [Godot Engine 4.3](https://godotengine.org/) (and was ported quite recently), so it will no longer support previous versions of the engine. If (for some reason) you still want to use an older version of Godot make sure to clone from the respective branch, but keep in mind that no new features will be added in the future.
+As mentioned before, this project uses [Godot Engine 4.3](https://godotengine.org/) (and was ported quite recently), so it will no longer support previous versions of the engine. If (for some reason) you still want to use an older version of Godot, make sure to clone from the respective branch, but keep in mind that no new features will be added in the future.
 
 
 # Features
 
-- Turn based
+- Turn-based
 - Grid movement
 - Each pawn can move and attack
 - Super basic (and stupid) enemy AI 
@@ -64,9 +64,9 @@ As mentioned before, this project uses [Godot Engine 4.3](https://godotengine.or
 
 # Contribute
 
-All code contributions and opened issues are welcome! However, since I want to keep this project as simple as posible I suggest first open an issue suggesting your idea before sending a PR. its really sad reject work just because it doesn't allign to a projects vision or it overrides a core functionallity (If that is the case, it will be better to start your own fork).
+All code contributions and opened issues are welcome! However, since I want to keep this project as simple as possible, I suggest first opening an issue suggesting your idea before sending a PR. It's really sad to reject work just because it doesn't align with a project's vision or it overrides a core functionality (If that is the case, it will be better to start your own fork).
 
-I now there's a lot of entry game developers in here who is looking into collaborate on open-source projects (which is nice), if that's your case checkout the label "Good First Issue" in the Issues Tab. So that you can get involve into this project with simple features.
+I know there are a lot of entry-level game developers in here who are looking to collaborate on open-source projects (which is nice). If that's your case, check out the label "Good First Issue" in the Issues Tab. So that you can get involved in this project with simple features.
 
 
 # Special thanks
@@ -76,4 +76,4 @@ I now there's a lot of entry game developers in here who is looking into collabo
 - Miziziziz
 - TutsByKai
 - AdamCYounis
-- Almost every other guy at Godot's formus / StackOverflow
+- Almost every other guy at Godot's forums / StackOverflow
