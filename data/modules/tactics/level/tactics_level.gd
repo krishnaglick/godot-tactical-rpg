@@ -118,6 +118,8 @@ func _initialize_turn_order() -> void:
 		participant.res.curr_pawn = first_unit
 		first_unit.show_pawn_stats(true)
 		camera.target = first_unit
+		ui_control.set_actions_menu_visibility(true, first_unit)
+		participant.res.stage = 1  # STAGE_SHOW_ACTIONS
 	
 	# Debug output
 	if DebugLog.debug_enabled:
