@@ -5,7 +5,9 @@ extends RefCounted
 ## Reference to the TacticsParticipantResource.
 var participant: TacticsParticipantResource
 ## Reference to the TacticsArenaResource.
-var arena: TacticsArenaResource
+var arena_resource: TacticsArenaResource
+## Reference to the actual TacticsArena node.
+var arena_node: TacticsArena
 ## Reference to the TacticsControlsResource.
 var controls: TacticsControlsResource
 ## Reference to the TacticsCameraResource.
@@ -17,15 +19,21 @@ var input_service: TacticsControlsInputService
 ## Initializes the TacticsControlsSelectionService with necessary resources and services.
 func _init(_participant: TacticsParticipantResource, _arena: TacticsArenaResource, _controls: TacticsControlsResource, _t_cam: TacticsCameraResource, _input_service: TacticsControlsInputService) -> void:
 	participant = _participant
-	arena = _arena
+	arena_resource = _arena
 	controls = _controls
 	t_cam = _t_cam
 	input_service = _input_service
+	
+	# Find the actual TacticsArena node from the scene tree
+	if input_service and input_service.input_capture:
+		var root: Node = input_service.input_capture.get_tree().root
+		if root:
+			arena_node = root.find_child("TacticsArena", true, false) as TacticsArena
 
 
 ## Handles the selection of a pawn.
 func select_pawn(player: TacticsPlayer, ctrl: TacticsControls) -> void:
-	arena.reset_all_tile_markers()
+	arena_resource.reset_all_tile_markers()
 	
 	# Hide the previous selection's ranges if switching units
 	if ctrl.curr_pawn and ctrl.curr_pawn != participant.curr_pawn:
@@ -47,8 +55,10 @@ func select_pawn(player: TacticsPlayer, ctrl: TacticsControls) -> void:
 		return
 	
 	# If hovering over a different unit, show their movement and attack ranges
-	arena.process_surrounding_tiles(ctrl.curr_pawn.get_tile(), ctrl.curr_pawn.stats.movement)
-	arena.mark_attackable_tiles(ctrl.curr_pawn.get_tile(), ctrl.curr_pawn.stats.attack_range)
+	var pawn_tile: TacticsTile = ctrl.curr_pawn.get_tile()
+	if pawn_tile and arena_node:
+		arena_node.process_surrounding_tiles(pawn_tile, ctrl.curr_pawn.stats.movement)
+		arena_node.mark_attackable_tiles(pawn_tile, ctrl.curr_pawn.stats.attack_range)
 	controls.set_actions_menu_visibility(false, ctrl.curr_pawn)
 
 
@@ -56,7 +66,7 @@ func select_pawn(player: TacticsPlayer, ctrl: TacticsControls) -> void:
 func _select_hovered_pawn(ctrl: TacticsControls) -> PhysicsBody3D:
 	var pawn: TacticsPawn = input_service.get_3d_canvas_mouse_position(2, ctrl)
 	var tile: TacticsTile = input_service.get_3d_canvas_mouse_position(1, ctrl) if not pawn else pawn.get_tile()
-	arena.mark_hover_tile(tile)
+	arena_resource.mark_hover_tile(tile)
 	return pawn if pawn else tile.get_tile_occupier() if tile else null
 
 
@@ -64,16 +74,16 @@ func _select_hovered_pawn(ctrl: TacticsControls) -> PhysicsBody3D:
 func _select_hovered_tile(ctrl: TacticsControls) -> TacticsTile:
 	var pawn: TacticsPawn = input_service.get_3d_canvas_mouse_position(2, ctrl)
 	var tile: TacticsTile = input_service.get_3d_canvas_mouse_position(1, ctrl) if not pawn else pawn.get_tile()
-	arena.mark_hover_tile(tile)
+	arena_resource.mark_hover_tile(tile)
 	return tile
 
 
 ## Handles the selection of a new location for the current pawn.
 func select_new_location(ctrl: TacticsControls) -> void:
 	var tile: TacticsTile = input_service.get_3d_canvas_mouse_position(1, ctrl)
-	arena.mark_hover_tile(tile)
+	arena_resource.mark_hover_tile(tile)
 	if Input.is_action_just_pressed("ui_accept") and tile and tile.reachable:
-		ctrl.curr_pawn.res.pathfinding_tilestack = arena.get_pathfinding_tilestack(tile)
+		ctrl.curr_pawn.res.pathfinding_tilestack = arena_resource.get_pathfinding_tilestack(tile)
 		t_cam.target = tile
 		participant.stage = 4
 
