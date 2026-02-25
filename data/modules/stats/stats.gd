@@ -16,6 +16,8 @@ var level: int = 1
 #region Base Stats
 ## Movement Points (The radius the pawn can move)
 var movement: int
+## Speed. Determines turn order in combat.
+var speed: int
 ## Jump height
 var jump: int
 ## Maximum health
@@ -39,6 +41,7 @@ func import_stats(stats: StatsResource) -> void:
 	expertise = stats.expertise
 	level = stats.level
 	movement = stats.movement
+	speed = stats.speed
 	stats.set_jump()
 	max_health = stats.max_health
 	curr_health = max_health

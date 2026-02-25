@@ -22,6 +22,12 @@ var opponent: TacticsOpponent
 var arena: TacticsArena
 ## Current turn stage (0: init, 1: handle)
 var turn_stage: int = 0
+## Service for managing turn order
+var turn_order_service: TurnOrderService = TurnOrderService.new()
+## Current turn order list (array of TacticsPawn units sorted by speed)
+var turn_order: Array = []
+## Current turn index
+var current_turn_index: int = 0
 #endregion
 
 #region: --- Processing ---
@@ -54,6 +60,8 @@ func _physics_process(delta: float) -> void:
 ## Checks requirements to begin the first turn.[br]Used by [TacticsPlayer], [TacticsOpponent]
 func _init_turn() -> void:
 	if participant.is_configured(player) and participant.is_configured(opponent):
+		if turn_order.is_empty():
+			_initialize_turn_order()
 		turn_stage = 1 # Move to turn handling stage if both player and opponent are configured
 
 ## Turn state management.[br]Used by [TacticsPlayer], [TacticsOpponent]
@@ -77,4 +85,45 @@ func _handle_turn(delta: float) -> void:
 			print_rich("[color=green]0Oo◦° O-----------------------------------O °◦oO0[/color]")
 		player.reset_turn(player) # Reset player's turn
 		opponent.reset_turn(opponent) # Reset opponent's turn
+
+
+## Initializes the turn order by collecting all pawns and sorting by speed
+## Player units always go first in the turn order
+func _initialize_turn_order() -> void:
+	var player_pawns: Array = []
+	var opponent_pawns: Array = []
+	
+	# Collect all player pawns
+	for pawn: TacticsPawn in player.get_children():
+		if pawn is TacticsPawn:
+			player_pawns.append(pawn)
+	
+	# Collect all opponent pawns
+	for pawn: TacticsPawn in opponent.get_children():
+		if pawn is TacticsPawn:
+			opponent_pawns.append(pawn)
+	
+	# Sort player pawns by speed (highest to lowest)
+	var sorted_player_pawns: Array = turn_order_service.get_turn_order(player_pawns)
+	# Sort opponent pawns by speed (highest to lowest)
+	var sorted_opponent_pawns: Array = turn_order_service.get_turn_order(opponent_pawns)
+	
+	# Build final turn order with player units first
+	turn_order = sorted_player_pawns + sorted_opponent_pawns
+	current_turn_index = 0
+	
+	# Select the first player unit
+	if not sorted_player_pawns.is_empty():
+		var first_unit: TacticsPawn = sorted_player_pawns[0]
+		participant.res.curr_pawn = first_unit
+		first_unit.show_pawn_stats(true)
+		camera.target = first_unit
+	
+	# Debug output
+	if DebugLog.debug_enabled:
+		print_rich("[color=cyan]Turn Order Initialized:[/color]")
+		for i: int in range(turn_order.size()):
+			var pawn: TacticsPawn = turn_order[i]
+			var owner_type: String = "Enemy" if pawn.get_parent() == opponent else "Player"
+			print_rich("[color=cyan]  %d. %s (Speed: %d)[/color]" % [i + 1, owner_type, pawn.stats.speed])
 #endregion
