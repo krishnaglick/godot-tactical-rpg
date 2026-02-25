@@ -10,6 +10,7 @@ strategy = 1
 level = 1
 sprite = "res://assets/textures/actor/character/chr_pawn_chemist.png"
 movement = 4
+speed = 4
 jump = 2.0
 max_health = 30
 attack_range = 3

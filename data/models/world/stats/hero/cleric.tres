@@ -10,6 +10,7 @@ strategy = 4
 level = 1
 sprite = "res://assets/textures/actor/character/chr_pawn_mage.png"
 movement = 4
+speed = 4
 jump = 2.0
 max_health = 35
 attack_range = 3

@@ -10,6 +10,7 @@ strategy = 3
 level = 1
 sprite = "res://assets/textures/actor/character/chr_pawn_archer.png"
 movement = 5
+speed = 5
 jump = 3.0
 max_health = 35
 attack_range = 6

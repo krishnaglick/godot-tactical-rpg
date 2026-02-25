@@ -20,6 +20,8 @@ extends Resource
 @export_category("Base")
 ## Movement. Average: 3-5 (base). Endgame: 9 max.
 @export var movement: int = 3
+## Speed. Determines turn order in combat. Average: 3-5.
+@export var speed: int = 3
 ## Jump height, calculated as half of movement
 @export var jump: float = movement / 2.0
 ## Maximum health of the actor
