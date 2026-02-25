@@ -26,8 +26,9 @@ func _init(_participant: TacticsParticipantResource, _arena: TacticsArenaResourc
 ## Handles the selection of a pawn.
 func select_pawn(player: TacticsPlayer, ctrl: TacticsControls) -> void:
 	arena.reset_all_tile_markers()
-	if ctrl.curr_pawn:
-		controls.set_actions_menu_visibility(false, participant.curr_pawn)
+	
+	# Hide the previous selection's ranges if switching units
+	if ctrl.curr_pawn and ctrl.curr_pawn != participant.curr_pawn:
 		ctrl.curr_pawn.show_pawn_stats(false)
 	
 	ctrl.curr_pawn = _select_hovered_pawn(ctrl)
@@ -36,12 +37,19 @@ func select_pawn(player: TacticsPlayer, ctrl: TacticsControls) -> void:
 	else:
 		ctrl.curr_pawn.show_pawn_stats(true)
 	
-	if Input.is_action_just_pressed("ui_accept") and ctrl.curr_pawn.can_act():
-		if ctrl.curr_pawn in player.get_children():
+	# Only allow controlling a pawn if it's the current active unit in turn order
+	if ctrl.curr_pawn == participant.curr_pawn:
+		# Check if clicked
+		if Input.is_action_just_pressed("ui_accept") and ctrl.curr_pawn.can_act():
+			# Already the current unit, just ensure camera is focused
 			t_cam.target = ctrl.curr_pawn
-			participant.curr_pawn = ctrl.curr_pawn
-			controls.set_actions_menu_visibility(true, participant.curr_pawn)
 			participant.stage = 1
+		return
+	
+	# If hovering over a different unit, show their movement and attack ranges
+	arena.process_surrounding_tiles(ctrl.curr_pawn.get_tile(), ctrl.curr_pawn.stats.movement)
+	arena.mark_attackable_tiles(ctrl.curr_pawn.get_tile(), ctrl.curr_pawn.stats.attack_range)
+	controls.set_actions_menu_visibility(false, ctrl.curr_pawn)
 
 
 ## Selects the pawn currently hovered by the mouse.
