@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_o41fk")
 move_speed = 10
-rotation_speed = 10
+rotation_speed = 4
 smoothing = 0.1
 zoom_speed = 10.0
 zoom_smoothness = 0.65
