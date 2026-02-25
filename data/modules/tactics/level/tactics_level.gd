@@ -20,6 +20,8 @@ var player: TacticsPlayer = null
 var opponent: TacticsOpponent
 ## Reference to the TacticsArena node
 var arena: TacticsArena
+## Reference to the TacticsControls node
+var controls_node: TacticsControls = null
 ## Current turn stage (0: init, 1: handle)
 var turn_stage: int = 0
 ## Service for managing turn order
@@ -42,6 +44,9 @@ func _ready() -> void:
 	player = $TacticsParticipant/TacticsPlayer
 	opponent = $TacticsParticipant/TacticsOpponent
 	arena = $TacticsArena
+	
+	# Find the TacticsControls node (search in parent tree)
+	controls_node = get_tree().root.find_child("TacticsControls", true, false) as TacticsControls
 	
 	arena.configure_tiles() # Configure arena tiles
 	participant.configure(camera, ui_control) # Configure participant with camera and UI control
@@ -116,6 +121,8 @@ func _initialize_turn_order() -> void:
 	if not sorted_player_pawns.is_empty():
 		var first_unit: TacticsPawn = sorted_player_pawns[0]
 		participant.res.curr_pawn = first_unit
+		if controls_node:
+			controls_node.curr_pawn = first_unit
 		first_unit.show_pawn_stats(true)
 		camera.target = first_unit
 		ui_control.set_actions_menu_visibility(true, first_unit)
